@@ -48,6 +48,8 @@ export const bookingsApi = {
     slot_name?: string;
     slot_start_time?: string;
     slot_end_time?: string;
+    check_in_time?: string;
+    check_out_time?: string;
     termsAccepted?: boolean;
     termsAcceptedAt?: string;
   }) => {

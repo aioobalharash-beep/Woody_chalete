@@ -30,6 +30,19 @@ export interface ClientFeatures {
   hasEvent: boolean;
 }
 
+/**
+ * Standard check-in / check-out wall-clock times for this client.
+ * Stored as 24-hour "HH:MM" so the existing pricingUtils.formatTime() helper
+ * can localise the label per language. These act as the *default* times when
+ * the booking record itself has no per-stay override.
+ */
+export interface ClientCheckInOut {
+  /** 24h format, e.g. "14:00" for 2:00 PM. */
+  checkInTime: string;
+  /** 24h format, e.g. "11:00" for 11:00 AM (next day for night stays). */
+  checkOutTime: string;
+}
+
 export interface ClientConfig {
   chaletName: string;
   logoPath: string | null;
@@ -38,6 +51,7 @@ export interface ClientConfig {
   social: ClientSocial;
   location: ClientLocation;
   features: ClientFeatures;
+  checkInOut: ClientCheckInOut;
 }
 
 export const CLIENT_CONFIG: ClientConfig = {
@@ -64,6 +78,10 @@ export const CLIENT_CONFIG: ClientConfig = {
     hasIdUpload: false,
     hasDayUse: false,
     hasEvent: false,
+  },
+  checkInOut: {
+    checkInTime: '14:00',   // 2:00 PM
+    checkOutTime: '11:00',  // 11:00 AM (next day for night stays)
   },
 };
 

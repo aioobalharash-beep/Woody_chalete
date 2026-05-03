@@ -19,6 +19,10 @@ type Body = {
   bookingId?: string;
   guest_name?: string;
   total_amount?: number | string;
+  check_in?: string;
+  check_out?: string;
+  check_in_time?: string;
+  check_out_time?: string;
 };
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -82,7 +86,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return;
   }
 
-  const { bookingId, guest_name, total_amount } = (req.body || {}) as Body;
+  const {
+    bookingId,
+    guest_name,
+    total_amount,
+    check_in,
+    check_out,
+    check_in_time,
+    check_out_time,
+  } = (req.body || {}) as Body;
 
   if (!guest_name || total_amount === undefined) {
     res.status(400).json({ error: 'guest_name and total_amount are required' });
@@ -130,7 +142,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     const tokens = Array.from(keptByAdmin.values()).map((v) => v.id);
     const title = '🛎️ حجز جديد! (New Booking!)';
-    const body = `${guest_name} has booked for ${total_amount} OMR.`;
+    const stayLine =
+      check_in && check_out
+        ? ` ${check_in}${check_in_time ? ` ${check_in_time}` : ''} → ${check_out}${check_out_time ? ` ${check_out_time}` : ''}`
+        : '';
+    const body = `${guest_name} has booked for ${total_amount} OMR.${stayLine}`;
 
     const response = await messaging.sendEachForMulticast({
       tokens,
@@ -141,6 +157,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         bookingId: bookingId || '',
         guest_name: String(guest_name),
         total_amount: String(total_amount),
+        check_in: check_in || '',
+        check_out: check_out || '',
+        check_in_time: check_in_time || '',
+        check_out_time: check_out_time || '',
         url: '/admin',
       },
       webpush: {

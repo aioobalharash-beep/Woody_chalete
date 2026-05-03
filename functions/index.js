@@ -29,9 +29,17 @@ exports.notifyAdminsOnNewBooking = onDocumentCreated(
     const guestName = booking.guest_name || 'A guest';
     const totalAmount =
       booking.grandTotal ?? booking.total_amount ?? booking.total ?? 0;
+    const checkIn = booking.check_in || '';
+    const checkOut = booking.check_out || '';
+    const checkInTime = booking.check_in_time || '';
+    const checkOutTime = booking.check_out_time || '';
 
     const title = '🛎️ حجز جديد! (New Booking!)';
-    const body = `${guestName} has booked for ${totalAmount} OMR.`;
+    const stayLine =
+      checkIn && checkOut
+        ? ` ${checkIn}${checkInTime ? ` ${checkInTime}` : ''} → ${checkOut}${checkOutTime ? ` ${checkOutTime}` : ''}`
+        : '';
+    const body = `${guestName} has booked for ${totalAmount} OMR.${stayLine}`;
 
     const tokensSnap = await getFirestore().collection('admin_tokens').get();
     if (tokensSnap.empty) {
@@ -50,6 +58,10 @@ exports.notifyAdminsOnNewBooking = onDocumentCreated(
         bookingId,
         guest_name: String(guestName),
         total_amount: String(totalAmount),
+        check_in: String(checkIn),
+        check_out: String(checkOut),
+        check_in_time: String(checkInTime),
+        check_out_time: String(checkOutTime),
         url: '/admin',
       },
       webpush: {

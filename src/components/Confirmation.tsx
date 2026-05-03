@@ -7,6 +7,7 @@ import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../services/firebase';
 import { useTranslation } from 'react-i18next';
 import { getClientConfig } from '../config/clientConfig';
+import { formatTime } from '../services/pricingUtils';
 
 export const Confirmation: React.FC = () => {
   const navigate = useNavigate();
@@ -141,17 +142,31 @@ export const Confirmation: React.FC = () => {
               <p className="font-bold text-primary-navy text-sm">
                 {new Date(booking.check_in).toLocaleDateString(lang === 'ar' ? 'ar-OM' : 'en-GB', { month: 'short', day: 'numeric', year: 'numeric' })}
               </p>
-            </div>
-            <div className="text-end">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-primary-navy/40 mb-1">{t('confirmation.dates')}</p>
-              <p className="font-bold text-primary-navy text-sm">
-                {isDayUse
-                  ? isFullDay
-                    ? t('common.dayUse')
-                    : (lang === 'ar' && booking.slot_name_ar ? booking.slot_name_ar : (booking.slot_name || t('common.partialBooking')))
-                  : `${booking.nights} ${booking.nights > 1 ? t('common.nights') : t('common.night')}`}
+              <p className="text-[11px] font-bold text-secondary-gold mt-0.5">
+                {formatTime(booking.check_in_time || getClientConfig().checkInOut.checkInTime, lang)}
               </p>
             </div>
+            <div className="text-end">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-primary-navy/40 mb-1">{t('guests.checkOut')}</p>
+              <p className="font-bold text-primary-navy text-sm">
+                {isDayUse
+                  ? new Date(booking.check_in).toLocaleDateString(lang === 'ar' ? 'ar-OM' : 'en-GB', { month: 'short', day: 'numeric', year: 'numeric' })
+                  : new Date(booking.check_out).toLocaleDateString(lang === 'ar' ? 'ar-OM' : 'en-GB', { month: 'short', day: 'numeric', year: 'numeric' })}
+              </p>
+              <p className="text-[11px] font-bold text-secondary-gold mt-0.5">
+                {formatTime(booking.check_out_time || getClientConfig().checkInOut.checkOutTime, lang)}
+              </p>
+            </div>
+          </div>
+
+          <div className="border-t border-primary-navy/5 pt-3 -mt-1">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-primary-navy/40">
+              {isDayUse
+                ? isFullDay
+                  ? t('common.dayUse')
+                  : (lang === 'ar' && booking.slot_name_ar ? booking.slot_name_ar : (booking.slot_name || t('common.partialBooking')))
+                : `${booking.nights} ${booking.nights > 1 ? t('common.nights') : t('common.night')}`}
+            </p>
           </div>
 
           <div className="border-t border-primary-navy/5 pt-4 space-y-2">

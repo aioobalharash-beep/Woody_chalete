@@ -9,7 +9,7 @@ const DEFAULT_TERMS_EN = `1. Booking & Payment
 All reservations require a security deposit at the time of booking. Full payment is due upon check-in. Accepted methods include Thawani, bank transfer, and walk-in payment.
 
 2. Check-In & Check-Out
-Check-in is available from 3:00 PM. Check-out must be completed by 12:00 PM. Early check-in or late check-out may be arranged subject to availability.
+Check-in is available from 2:00 PM. Check-out must be completed by 11:00 AM. Early check-in or late check-out may be arranged subject to availability.
 
 3. Cancellation Policy
 Cancellations made 48 hours prior to check-in are eligible for a full refund of the security deposit. Late cancellations may incur a charge equivalent to one night's stay.
@@ -24,7 +24,7 @@ const DEFAULT_TERMS_AR = `1. الحجز والدفع
 تتطلب جميع الحجوزات دفع تأمين قابل للاسترداد عند الحجز. يُستحق المبلغ كاملاً عند تسجيل الوصول. وسائل الدفع المقبولة: ثواني، التحويل البنكي، والدفع المباشر.
 
 2. تسجيل الوصول والمغادرة
-تسجيل الوصول من الساعة 3:00 مساءً. تسجيل المغادرة قبل الساعة 12:00 ظهراً. يمكن ترتيب وصول مبكر أو مغادرة متأخرة حسب التوفر.
+تسجيل الوصول من الساعة 2:00 مساءً. تسجيل المغادرة قبل الساعة 11:00 صباحاً. يمكن ترتيب وصول مبكر أو مغادرة متأخرة حسب التوفر.
 
 3. سياسة الإلغاء
 الإلغاءات قبل 48 ساعة من تسجيل الوصول تستحق استرداداً كاملاً للتأمين. الإلغاءات المتأخرة قد يترتب عليها رسوم تعادل ليلة واحدة.

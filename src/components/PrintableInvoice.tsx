@@ -1,6 +1,7 @@
 import React from 'react';
 import type { Invoice } from '../types';
 import { getClientConfig } from '../config/clientConfig';
+import { formatTime } from '../services/pricingUtils';
 
 interface PrintableInvoiceProps {
   invoice: Invoice;
@@ -17,16 +18,11 @@ interface PrintableInvoiceProps {
   termsText?: string;
 }
 
-const CHECK_IN_TIME_EN = '2:00 PM';
-const CHECK_OUT_TIME_EN = '10:00 AM';
-const CHECK_IN_TIME_AR = '2:00 م';
-const CHECK_OUT_TIME_AR = '10:00 ص';
-
 const DEFAULT_TERMS_EN = `1. Booking & Payment
 All reservations require a security deposit at the time of booking. Full payment is due upon check-in. Accepted methods include Thawani, bank transfer, and walk-in payment.
 
 2. Check-In & Check-Out
-Check-in is available from 2:00 PM. Check-out must be completed by 10:00 AM. Early check-in or late check-out may be arranged subject to availability.
+Check-in is available from 2:00 PM. Check-out must be completed by 11:00 AM. Early check-in or late check-out may be arranged subject to availability.
 
 3. Security Deposit
 A refundable security deposit is collected at booking. Any damages, missing items, or additional cleaning beyond normal use will be deducted from the deposit. The remaining balance is refunded within 3–5 business days after check-out once the property is inspected.
@@ -44,7 +40,7 @@ const DEFAULT_TERMS_AR = `1. الحجز والدفع
 تتطلب جميع الحجوزات دفع تأمين قابل للاسترداد عند الحجز. يُستحق المبلغ كاملاً عند تسجيل الوصول. وسائل الدفع المقبولة: ثواني، التحويل البنكي، والدفع المباشر.
 
 2. تسجيل الوصول والمغادرة
-تسجيل الوصول من الساعة 2:00 مساءً. تسجيل المغادرة قبل الساعة 10:00 صباحاً. يمكن ترتيب وصول مبكر أو مغادرة متأخرة حسب التوفر.
+تسجيل الوصول من الساعة 2:00 مساءً. تسجيل المغادرة قبل الساعة 11:00 صباحاً. يمكن ترتيب وصول مبكر أو مغادرة متأخرة حسب التوفر.
 
 3. مبلغ التأمين
 يُحصَّل مبلغ تأمين قابل للاسترداد عند الحجز. أي أضرار أو عناصر مفقودة أو تنظيف إضافي يتجاوز الاستخدام الطبيعي يُخصم من المبلغ. يُعاد المتبقي خلال 3 إلى 5 أيام عمل بعد تسجيل المغادرة ومعاينة العقار.
@@ -112,9 +108,11 @@ export const PrintableInvoice: React.FC<PrintableInvoiceProps> = ({
   const checkInStr = fmtDate(checkIn);
   const checkOutStr = fmtDate(checkOut);
 
-  // Use booking-specific times when available; fall back to property defaults
-  const checkInTime = checkInTimeProp || (isAr ? CHECK_IN_TIME_AR : CHECK_IN_TIME_EN);
-  const checkOutTime = checkOutTimeProp || (isAr ? CHECK_OUT_TIME_AR : CHECK_OUT_TIME_EN);
+  // Use booking-specific times when available; otherwise fall back to the
+  // standard times configured for this client in clientConfig.checkInOut.
+  const { checkInOut: clientTimes, logoPath } = getClientConfig();
+  const checkInTime = checkInTimeProp || formatTime(clientTimes.checkInTime, lang);
+  const checkOutTime = checkOutTimeProp || formatTime(clientTimes.checkOutTime, lang);
 
   const t = {
     invoice: isAr ? 'فاتورة' : 'INVOICE',
@@ -200,11 +198,13 @@ export const PrintableInvoice: React.FC<PrintableInvoiceProps> = ({
         <header className="pi-header">
           <div className="pi-header-inner">
             <div className="pi-brand">
-              <img
-                src="/assets/brand/logo.png"
-                className="invoice-logo"
-                alt={isAr ? 'شعار شاليه وودي' : 'Woody Chalete Logo'}
-              />
+              {logoPath && (
+                <img
+                  src={logoPath}
+                  className="invoice-logo"
+                  alt={isAr ? `شعار ${company}` : `${company} Logo`}
+                />
+              )}
               <div>
                 <div className="pi-brand-name">{company}</div>
                 <div className="pi-brand-tag">{t.location}</div>
