@@ -13,11 +13,13 @@ import { calculateTotalPrice, formatBreakdown, migratePricing, formatTime, getSl
 import type { Property } from '../types';
 import { useTranslation } from 'react-i18next';
 import { bl } from '../utils/bilingual';
+import { getClientConfig } from '../config/clientConfig';
 
 export const Booking: React.FC = () => {
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
+  const features = getClientConfig().features;
   const [property, setProperty] = useState<Property | null>(null);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
@@ -28,6 +30,7 @@ export const Booking: React.FC = () => {
   const [guestEmail, setGuestEmail] = useState('');
   const [selectedDates, setSelectedDates] = useState<{ start: number | null; end: number | null }>({ start: null, end: null });
   // Stay type — explicit guest selection. 'event' is a single-day, flat-priced full-day-and-night booking.
+  // Day Use and Event options can be hidden per-client via features.hasDayUse / features.hasEvent.
   const [stayType, setStayType] = useState<'day_use' | 'night_stay' | 'event'>('night_stay');
   // Thawani temporarily hidden from the public UI; bank transfer is the only guest-visible option.
   const SHOW_THAWANI = false;
@@ -441,7 +444,7 @@ export const Booking: React.FC = () => {
       newErrors.email = 'Please enter a valid email address';
     }
 
-    if (!idImageUrl) {
+    if (features.hasIdUpload && !idImageUrl) {
       newErrors.idImage = idUploading
         ? 'Please wait for the ID upload to finish'
         : 'Please upload a clear photo of your Civil ID or Passport';
@@ -733,21 +736,28 @@ export const Booking: React.FC = () => {
         </motion.div>
       )}
 
-      {/* Stay Type Selector */}
+      {/* Stay Type Selector — options filtered by client features */}
+      {(() => {
+        const stayTypeOptions = ([
+          features.hasDayUse && { value: 'day_use' as const, label: t('booking.stayTypeDayUse'), sub: undefined },
+          { value: 'night_stay' as const, label: t('booking.stayTypeNightStay'), sub: undefined },
+          features.hasEvent && {
+            value: 'event' as const,
+            label: pricingSettings?.event_category_name?.trim() || t('booking.stayTypeEvent'),
+            sub: t('booking.pricePerNight', { amount: eventRate }),
+          },
+        ] as const).filter(Boolean) as ReadonlyArray<{ value: 'day_use' | 'night_stay' | 'event'; label: string; sub: string | undefined }>;
+
+        // When only one option exists (Night Stay), suppress the entire picker.
+        if (stayTypeOptions.length <= 1) return null;
+
+        return (
       <section className="space-y-3">
         <label className="text-[10px] font-bold uppercase tracking-widest text-secondary-gold">
           {t('booking.stayType')} *
         </label>
-        <div className="grid grid-cols-3 gap-3">
-          {([
-            { value: 'day_use', label: t('booking.stayTypeDayUse'), sub: undefined },
-            { value: 'night_stay', label: t('booking.stayTypeNightStay'), sub: undefined },
-            {
-              value: 'event',
-              label: pricingSettings?.event_category_name?.trim() || t('booking.stayTypeEvent'),
-              sub: t('booking.pricePerNight', { amount: eventRate }),
-            },
-          ] as const).map(opt => (
+        <div className={cn("grid gap-3", stayTypeOptions.length === 2 ? "grid-cols-2" : "grid-cols-3")}>
+          {stayTypeOptions.map(opt => (
             <button
               key={opt.value}
               type="button"
@@ -794,6 +804,8 @@ export const Booking: React.FC = () => {
           ))}
         </div>
       </section>
+        );
+      })()}
 
       {/* Check-in / Check-out Cards */}
       <section className="space-y-3">
@@ -1155,6 +1167,7 @@ export const Booking: React.FC = () => {
           {errors.phone && <p className="text-red-500 text-xs font-medium">{errors.phone}</p>}
         </div>
 
+        {features.hasIdUpload && (
         <div className="space-y-2">
           <label className="text-[10px] font-bold uppercase tracking-widest text-secondary-gold">
             {t('booking.civilIdPassport')} *
@@ -1199,6 +1212,7 @@ export const Booking: React.FC = () => {
           </label>
           {errors.idImage && <p className="text-red-500 text-xs font-medium">{errors.idImage}</p>}
         </div>
+        )}
 
         <div className="space-y-2">
           <label className="text-[10px] font-bold uppercase tracking-widest text-secondary-gold">{t('booking.emailOptional')}</label>
@@ -1386,7 +1400,7 @@ export const Booking: React.FC = () => {
 
         <button
           onClick={handleSubmit}
-          disabled={submitting || idUploading || !idImageUrl || (!isDayUse && nights === 0) || maintenanceMode || (!!termsOfStay && !termsAccepted)}
+          disabled={submitting || (features.hasIdUpload && (idUploading || !idImageUrl)) || (!isDayUse && nights === 0) || maintenanceMode || (!!termsOfStay && !termsAccepted)}
           className="w-full bg-primary-navy text-white py-5 rounded-[20px] font-bold text-sm uppercase tracking-widest shadow-xl shadow-primary-navy/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2 disabled:opacity-50"
         >
           {submitting ? (

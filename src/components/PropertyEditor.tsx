@@ -11,6 +11,7 @@ import { uploadToCloudinary as uploadImageToCloudinary } from '../services/cloud
 import { migratePricing, formatTime, type PricingSettings, type DayUseSlot } from '../services/pricingUtils';
 import { type BilingualField, toBilingual } from '../utils/bilingual';
 import { useLanguage } from '../contexts/LanguageContext';
+import { getClientConfig } from '../config/clientConfig';
 
 interface GalleryImage { url: string; label: string; }
 
@@ -116,6 +117,7 @@ const PropertyEditorComponent: React.FC = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const { isRTL } = useLanguage();
+  const features = getClientConfig().features;
   const dir = isRTL ? 'rtl' : 'ltr';
   const textAlignClass = isRTL ? 'text-right' : 'text-left';
   const inputClass = cn(baseInputClass, textAlignClass);
@@ -290,10 +292,12 @@ const PropertyEditorComponent: React.FC = () => {
   };
 
   const addSpecialDate = () => {
-    if (!specialDate || !specialDayUsePrice || !specialNightPrice) return;
-    const dayUse = parseFloat(specialDayUsePrice);
+    const features = getClientConfig().features;
+    if (!specialDate || !specialNightPrice) return;
+    if (features.hasDayUse && !specialDayUsePrice) return;
+    const dayUse = features.hasDayUse ? parseFloat(specialDayUsePrice) : 0;
     const night = parseFloat(specialNightPrice);
-    if (isNaN(dayUse) || dayUse <= 0) return;
+    if (features.hasDayUse && (isNaN(dayUse) || dayUse <= 0)) return;
     if (isNaN(night) || night <= 0) return;
     setPricing({
       special_dates: [
@@ -434,6 +438,7 @@ const PropertyEditorComponent: React.FC = () => {
         </div>
 
         {/* Event Booking */}
+        {features.hasEvent && (
         <div className="pt-4 border-t border-primary-navy/5">
           <div className="flex items-center gap-2 mb-3">
             <Tag size={14} className="text-secondary-gold" />
@@ -466,6 +471,7 @@ const PropertyEditorComponent: React.FC = () => {
             </div>
           </div>
         </div>
+        )}
 
         {/* Security Deposit */}
         <div className="pt-4 border-t border-primary-navy/5">
@@ -480,6 +486,7 @@ const PropertyEditorComponent: React.FC = () => {
       </section>
 
       {/* Day-Use Time Slots */}
+      {features.hasDayUse && (
       <section className="bg-white rounded-[20px] p-6 border border-primary-navy/5 shadow-sm space-y-5">
         <div className="flex items-center gap-2">
           <Clock size={16} className="text-secondary-gold" />
@@ -561,6 +568,7 @@ const PropertyEditorComponent: React.FC = () => {
           </button>
         </div>
       </section>
+      )}
 
       {/* Special Date Overrides */}
       <section className="bg-white rounded-[20px] p-6 border border-primary-navy/5 shadow-sm space-y-5">
@@ -583,10 +591,12 @@ const PropertyEditorComponent: React.FC = () => {
                   {new Date(s.date).toLocaleDateString(isRTL ? 'ar-OM' : 'en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
                 </span>
                 <div className="flex items-center gap-4 flex-1 justify-end">
+                  {features.hasDayUse && (
                   <div className="flex items-baseline gap-1.5">
                     <span className="text-[10px] font-bold uppercase tracking-widest text-primary-navy/40">{t('propertyEditor.dayUseLabel')}</span>
                     <span className="text-sm font-bold text-secondary-gold font-headline">{s.day_use_price} {t('common.omr')}</span>
                   </div>
+                  )}
                   <div className="flex items-baseline gap-1.5">
                     <span className="text-[10px] font-bold uppercase tracking-widest text-primary-navy/40">{t('propertyEditor.nightStayLabel')}</span>
                     <span className="text-sm font-bold text-secondary-gold font-headline">{s.night_stay_price} {t('common.omr')}</span>
@@ -600,11 +610,12 @@ const PropertyEditorComponent: React.FC = () => {
           </div>
         )}
 
-        <div className="grid grid-cols-1 sm:grid-cols-[1fr_auto_auto_auto] gap-2 items-end">
+        <div className={cn("grid gap-2 items-end", features.hasDayUse ? "grid-cols-1 sm:grid-cols-[1fr_auto_auto_auto]" : "grid-cols-1 sm:grid-cols-[1fr_auto_auto]")}>
           <div className="space-y-1.5">
             <label className="text-[10px] font-bold uppercase tracking-widest text-primary-navy/40">{t('propertyEditor.date')}</label>
             <input type="date" dir={dir} value={specialDate} onChange={(e) => setSpecialDate(e.target.value)} className={inputClass} />
           </div>
+          {features.hasDayUse && (
           <div className="w-full sm:w-40 space-y-1.5">
             <label className="text-[10px] font-bold uppercase tracking-widest text-primary-navy/40">
               {t('propertyEditor.dayUsePriceOmr')}
@@ -619,6 +630,7 @@ const PropertyEditorComponent: React.FC = () => {
               className={inputClass}
             />
           </div>
+          )}
           <div className="w-full sm:w-40 space-y-1.5">
             <label className="text-[10px] font-bold uppercase tracking-widest text-primary-navy/40">
               {t('propertyEditor.nightStayPriceOmr')}
@@ -635,7 +647,7 @@ const PropertyEditorComponent: React.FC = () => {
           </div>
           <button
             onClick={addSpecialDate}
-            disabled={!specialDate || !specialDayUsePrice || !specialNightPrice}
+            disabled={!specialDate || !specialNightPrice || (features.hasDayUse && !specialDayUsePrice)}
             className="px-4 py-3 bg-primary-navy/5 rounded-xl text-primary-navy/60 hover:bg-primary-navy/10 transition-colors disabled:opacity-30"
           >
             <Plus size={16} />
