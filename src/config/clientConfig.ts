@@ -16,12 +16,28 @@ export interface ClientSocial {
   instagram?: string;
 }
 
+export interface ClientLocation {
+  /** Public Google Maps link shown in confirmation, invoices, footer. */
+  mapsUrl: string;
+}
+
+export interface ClientFeatures {
+  /** Require guests to upload Civil ID / Passport during booking. */
+  hasIdUpload: boolean;
+  /** Allow Day Use bookings (guest selector + admin pricing/slots). */
+  hasDayUse: boolean;
+  /** Allow Event bookings (guest selector + admin pricing). */
+  hasEvent: boolean;
+}
+
 export interface ClientConfig {
   chaletName: string;
   logoPath: string | null;
   theme: ClientTheme;
   admin: ClientAdmin;
   social: ClientSocial;
+  location: ClientLocation;
+  features: ClientFeatures;
 }
 
 export const CLIENT_CONFIG: ClientConfig = {
@@ -40,6 +56,14 @@ export const CLIENT_CONFIG: ClientConfig = {
   social: {
     whatsapp: '96879210323',
     instagram: 'https://www.instagram.com/wooody_chalete/',
+  },
+  location: {
+    mapsUrl: 'https://maps.app.goo.gl/Wsnnm9W6nxvyBUcy8',
+  },
+  features: {
+    hasIdUpload: false,
+    hasDayUse: false,
+    hasEvent: false,
   },
 };
 

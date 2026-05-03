@@ -1,5 +1,6 @@
 import React from 'react';
 import type { Invoice } from '../types';
+import { getClientConfig } from '../config/clientConfig';
 
 interface PrintableInvoiceProps {
   invoice: Invoice;
@@ -144,7 +145,7 @@ export const PrintableInvoice: React.FC<PrintableInvoiceProps> = ({
     locationEn: 'Location',
   };
 
-  const locationUrl = 'https://maps.app.goo.gl/Wsnnm9W6nxvyBUcy8';
+  const locationUrl = getClientConfig().location.mapsUrl;
   const LocationPin = () => (
     <svg
       className="pi-footer-location-icon"

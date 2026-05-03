@@ -170,7 +170,7 @@ const Footer = React.memo<FooterProps>(({ chaletName, footerText, whatsappNumber
           <span className="text-xs font-bold">Instagram</span>
         </a>
         <a
-          href="https://maps.app.goo.gl/Zz9uFgWiYWyBEUnVA"
+          href={getClientConfig().location.mapsUrl}
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Location"
