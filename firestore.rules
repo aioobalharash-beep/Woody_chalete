@@ -88,7 +88,9 @@ service cloud.firestore {
     match /invoice_items/{id} { allow read, write: if isAdmin(); }
 
     // ── FCM device tokens for admin push notifications ──
-    match /admin_push_tokens/{id} {
+    // Collection name must match ADMIN_TOKENS_COLLECTION in
+    // src/services/pushNotifications.ts and the api/functions handlers.
+    match /admin_tokens/{id} {
       allow read, write: if isAdmin();
     }
   }
