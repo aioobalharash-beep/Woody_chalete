@@ -563,6 +563,10 @@ export const Booking: React.FC = () => {
             payment_method: 'thawani',
             idImageUrl: idImageUrl || undefined,
             stay_type: stayType,
+            ...(stayTimes ? {
+              check_in_time: stayTimes.checkInTime,
+              check_out_time: stayTimes.checkOutTime,
+            } : {}),
             ...(selectedSlot ? {
               slot_id: selectedSlot.id,
               slot_name: selectedSlot.name,
@@ -634,6 +638,10 @@ export const Booking: React.FC = () => {
         payment_method: paymentMethod,
         receiptURL,
         idImageUrl: idImageUrl || undefined,
+        ...(stayTimes ? {
+          check_in_time: stayTimes.checkInTime,
+          check_out_time: stayTimes.checkOutTime,
+        } : {}),
         ...(selectedSlot ? {
           slot_id: selectedSlot.id,
           slot_name: selectedSlot.name,

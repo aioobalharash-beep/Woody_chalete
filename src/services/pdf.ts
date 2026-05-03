@@ -1,5 +1,6 @@
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import { getClientConfig } from '../config/clientConfig';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -205,6 +206,14 @@ function buildInvoiceHtml(
 
   const refId = invoice.id.slice(0, 8).toUpperCase();
 
+  const { logoPath } = getClientConfig();
+  // Resolve a same-origin absolute URL so html2canvas can read the image
+  // without tripping over relative paths inside the off-screen render frame.
+  const logoUrl =
+    logoPath && typeof window !== 'undefined'
+      ? new URL(logoPath, window.location.origin).toString()
+      : logoPath || '';
+
   const footerText = isAr
     ? 'شاليه وودي  |  سلطنة عُمان  |  هذه فاتورة صادرة آلياً ولا تتطلب توقيعاً'
     : 'Woody Chalete  |  Sultanate of Oman  |  This is a computer-generated invoice.';
@@ -238,10 +247,13 @@ function buildInvoiceHtml(
     <div style="padding:48px 48px 36px;font-family:${FONT_STACK};color:${NAVY};line-height:1.6;">
 
       <!-- Header -->
-      <div style="${textStart};margin-bottom:4px;">
-        <div style="font-size:22px;font-weight:700;letter-spacing:0.5px;">${companyName}</div>
-        <div style="font-size:10px;color:#888;margin-top:4px;">${location}</div>
-        ${regInfo ? `<div style="font-size:10px;color:#888;margin-top:2px;">${regInfo}</div>` : ''}
+      <div style="display:flex;align-items:center;gap:16px;${isAr ? 'flex-direction:row-reverse;' : ''}margin-bottom:4px;">
+        ${logoUrl ? `<img src="${logoUrl}" alt="${companyName}" style="height:48px;width:auto;object-fit:contain;" crossorigin="anonymous" />` : ''}
+        <div style="${textStart};">
+          <div style="font-size:22px;font-weight:700;letter-spacing:0.5px;">${companyName}</div>
+          <div style="font-size:10px;color:#888;margin-top:4px;">${location}</div>
+          ${regInfo ? `<div style="font-size:10px;color:#888;margin-top:2px;">${regInfo}</div>` : ''}
+        </div>
       </div>
 
       <hr style="border:none;border-top:1px solid ${LIGHT_BORDER};margin:24px 0;" />

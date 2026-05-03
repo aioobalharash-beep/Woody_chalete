@@ -115,6 +115,10 @@ export function notifyAdminsOfNewBooking(params: {
   bookingId: string;
   guest_name: string;
   total_amount: number | string;
+  check_in?: string;
+  check_out?: string;
+  check_in_time?: string;   // 24h "HH:MM"
+  check_out_time?: string;  // 24h "HH:MM"
 }): void {
   try {
     fetch('/api/notify-admin', {

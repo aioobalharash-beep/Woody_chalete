@@ -1,3 +1,5 @@
+import { getClientConfig } from '../config/clientConfig';
+
 export interface DayUseSlot {
   id: string;
   name: string;
@@ -315,17 +317,15 @@ export function formatBreakdown(
 
 // ── Check-in / Check-out timing engine ──────────────────────────────────────
 //
-// Woody Chalete operates on a weekday/weekend schedule:
-//   Sun–Wed : day use ends 10 PM, overnight check-out 10 AM
-//   Thu–Sat : day use ends 11 PM, overnight check-out 11 AM
-// Check-in is always 2 PM. The rules key off the DAY THE GUEST LEAVES
-// (same day for day-use, next day for overnight) so the calendar can surface
-// accurate times the moment the guest picks dates.
+// Standard times come from clientConfig.checkInOut (24h "HH:MM"). The legacy
+// late-schedule extension for Thu–Sat day-use is preserved (slots end at
+// 11 PM instead of 10 PM) so existing dynamic-pricing setups keep working;
+// night-stay check-out is flat per the configured time.
 
 export interface StayTimes {
-  /** 24h start time, always "14:00" */
+  /** 24h start time from clientConfig.checkInOut.checkInTime */
   checkInTime: string;
-  /** 24h end time — "22:00"/"23:00" for day-use, "10:00"/"11:00" for overnight */
+  /** 24h end time — late schedule for day-use, configured time for overnight */
   checkOutTime: string;
   /** Localised check-in label (e.g. "2:00 PM") */
   checkInLabel: string;
@@ -335,7 +335,7 @@ export interface StayTimes {
   isOvernight: boolean;
 }
 
-/** Days Thu(4)–Sat(6) get the late (11 PM / 11 AM) schedule. */
+/** Days Thu(4)–Sat(6) get the late day-use cut-off (11 PM instead of 10 PM). */
 function isLateScheduleDay(dow: number): boolean {
   return dow === 4 || dow === 5 || dow === 6;
 }
@@ -343,7 +343,7 @@ function isLateScheduleDay(dow: number): boolean {
 /** Day-use times for a single-day stay on `date`. */
 export function getDayUseTimes(date: Date, lang = 'en'): StayTimes {
   const dow = date.getDay();
-  const checkInTime = '14:00';
+  const { checkInTime } = getClientConfig().checkInOut;
   const checkOutTime = isLateScheduleDay(dow) ? '23:00' : '22:00';
   return {
     checkInTime,
@@ -355,14 +355,11 @@ export function getDayUseTimes(date: Date, lang = 'en'): StayTimes {
 }
 
 /**
- * Overnight times. `checkOutDate` is the calendar day the guest LEAVES — that
- * day's weekday determines the 10/11 AM cut-off so a booking that ends on a
- * Thursday gets the 11 AM grace window.
+ * Overnight times. Pulled directly from clientConfig.checkInOut so each
+ * client sets their own standard window — Woody = 14:00 in / 11:00 out.
  */
-export function getNightStayTimes(checkOutDate: Date, lang = 'en'): StayTimes {
-  const dow = checkOutDate.getDay();
-  const checkInTime = '14:00';
-  const checkOutTime = isLateScheduleDay(dow) ? '11:00' : '10:00';
+export function getNightStayTimes(_checkOutDate: Date, lang = 'en'): StayTimes {
+  const { checkInTime, checkOutTime } = getClientConfig().checkInOut;
   return {
     checkInTime,
     checkOutTime,

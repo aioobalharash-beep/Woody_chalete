@@ -5,6 +5,8 @@ import { cn } from '@/src/lib/utils';
 import { useTranslation } from 'react-i18next';
 import { firestoreBookings } from '../services/firestore';
 import { uploadToCloudinary } from '../services/cloudinary';
+import { getClientConfig } from '../config/clientConfig';
+import { formatTime } from '../services/pricingUtils';
 import type { Property } from '../types';
 
 interface AddWalkInGuestProps {
@@ -36,13 +38,13 @@ const EMPTY_FORM: WalkInForm = {
   property_name: '',
 };
 
-// Returns the checkout time string based on the checkout date day-of-week.
-// Thu (4), Fri (5), Sat (6) → 11:00 AM; all other days → 10:00 AM.
-function getNightCheckOutTime(checkOutDate: string): string {
-  if (!checkOutDate) return '10:00 AM';
-  const [y, m, d] = checkOutDate.split('-').map(Number);
-  const dow = new Date(y, m - 1, d).getDay();
-  return [4, 5, 6].includes(dow) ? '11:00 AM' : '10:00 AM';
+// Default check-in / check-out labels come from clientConfig.checkInOut, so each
+// client owns their standard times in one place.
+function defaultCheckInLabel(): string {
+  return formatTime(getClientConfig().checkInOut.checkInTime);
+}
+function defaultCheckOutLabel(): string {
+  return formatTime(getClientConfig().checkInOut.checkOutTime);
 }
 
 export const AddWalkInGuest: React.FC<AddWalkInGuestProps> = ({ open, onClose, properties }) => {
@@ -53,8 +55,8 @@ export const AddWalkInGuest: React.FC<AddWalkInGuestProps> = ({ open, onClose, p
   const [submitting, setSubmitting] = useState(false);
 
   const [stayType, setStayType] = useState<StayType>('night');
-  const [checkInTime, setCheckInTime] = useState('2:00 PM');
-  const [checkOutTime, setCheckOutTime] = useState('10:00 AM');
+  const [checkInTime, setCheckInTime] = useState(defaultCheckInLabel());
+  const [checkOutTime, setCheckOutTime] = useState(defaultCheckOutLabel());
 
   const [paymentMode, setPaymentMode] = useState<PaymentMode>('paid');
   const [amountPaid, setAmountPaid] = useState('');
@@ -77,23 +79,20 @@ export const AddWalkInGuest: React.FC<AddWalkInGuestProps> = ({ open, onClose, p
     }
   }, [stayType, form.check_in]);
 
-  // Auto-populate times based on stayType and check_out date
+  // Auto-populate times based on stayType. Night stays use the configured
+  // standard window; same-day defaults to the configured check-in + 11 PM
+  // (admin can override either input directly).
   useEffect(() => {
-    if (stayType === 'sameday') {
-      setCheckInTime('2:00 PM');
-      setCheckOutTime('11:00 PM');
-    } else {
-      setCheckInTime('2:00 PM');
-      setCheckOutTime(getNightCheckOutTime(form.check_out));
-    }
+    setCheckInTime(defaultCheckInLabel());
+    setCheckOutTime(stayType === 'sameday' ? '11:00 PM' : defaultCheckOutLabel());
   }, [stayType, form.check_out]);
 
   const reset = () => {
     setForm(EMPTY_FORM);
     setErrors({});
     setStayType('night');
-    setCheckInTime('2:00 PM');
-    setCheckOutTime('10:00 AM');
+    setCheckInTime(defaultCheckInLabel());
+    setCheckOutTime(defaultCheckOutLabel());
     setPaymentMode('paid');
     setAmountPaid('');
     setReceiptFile(null);
@@ -356,7 +355,7 @@ export const AddWalkInGuest: React.FC<AddWalkInGuestProps> = ({ open, onClose, p
                 type="text"
                 value={checkInTime}
                 onChange={(e) => setCheckInTime(e.target.value)}
-                placeholder="2:00 PM"
+                placeholder={defaultCheckInLabel()}
                 className="w-full bg-surface-container-low border border-transparent rounded-xl py-3 px-4 text-sm placeholder:text-primary-navy/20"
               />
             </div>
@@ -368,7 +367,7 @@ export const AddWalkInGuest: React.FC<AddWalkInGuestProps> = ({ open, onClose, p
                 type="text"
                 value={checkOutTime}
                 onChange={(e) => setCheckOutTime(e.target.value)}
-                placeholder="10:00 AM"
+                placeholder={defaultCheckOutLabel()}
                 className="w-full bg-surface-container-low border border-transparent rounded-xl py-3 px-4 text-sm placeholder:text-primary-navy/20"
               />
             </div>

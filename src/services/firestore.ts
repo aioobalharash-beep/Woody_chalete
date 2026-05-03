@@ -407,6 +407,10 @@ export const firestoreBookings = {
       bookingId: docRef.id,
       guest_name: data.guest_name,
       total_amount: grandTotal,
+      check_in: data.check_in,
+      check_out: data.check_out,
+      check_in_time: booking.check_in_time,
+      check_out_time: booking.check_out_time,
     });
 
     return { ...booking, id: docRef.id };
