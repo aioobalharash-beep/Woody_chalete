@@ -148,7 +148,7 @@ function buildInvoiceHtml(
     year: 'numeric',
   });
 
-  const companyName = (invoice.chaletName || (isAr ? 'شاليه الملاك' : 'Al Malak Chalet')).toUpperCase();
+  const companyName = (invoice.chaletName || (isAr ? 'شاليه وودي' : 'Woody Chalete')).toUpperCase();
   const location = isAr ? 'مسقط، سلطنة عُمان' : 'Muscat, Sultanate of Oman';
   const regInfo = invoice.licenseNumber
     ? (isAr ? `ترخيص سياحي: ${invoice.licenseNumber}` : `Tourism License: ${invoice.licenseNumber}`)
@@ -307,7 +307,7 @@ function buildTermsHtml(
   const dir = isAr ? 'rtl' : 'ltr';
   const textStart = isAr ? 'text-right' : 'text-left';
 
-  const companyName = isAr ? 'شاليه الملاك' : 'AL MALAK CHALET';
+  const companyName = isAr ? 'شاليه وودي' : 'WOODY CHALETE';
   const location = isAr ? 'مسقط، سلطنة عُمان' : 'Muscat, Sultanate of Oman';
   const title = isAr ? 'شروط الإقامة' : 'Terms of Stay';
 

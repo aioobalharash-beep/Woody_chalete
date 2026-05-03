@@ -134,17 +134,17 @@ export const PrintableInvoice: React.FC<PrintableInvoiceProps> = ({
       ? 'يُحصَّل الرصيد المتبقي عند تسجيل الدخول.'
       : 'Remaining balance to be collected at check-in.',
     footer: isAr
-      ? 'شكراً لاختياركم شاليه الملاك  •  فاتورة صادرة آلياً ولا تتطلب توقيعاً'
-      : 'Thank you for choosing Al Malak Chalet  •  This is a computer-generated invoice.',
+      ? 'شكراً لاختياركم شاليه وودي  •  فاتورة صادرة آلياً ولا تتطلب توقيعاً'
+      : 'Thank you for choosing Woody Chalete  •  This is a computer-generated invoice.',
     termsTitle: isAr ? 'شروط الإقامة' : 'Terms of Stay',
     termsIntro: isAr
-      ? 'يُرجى مراجعة الشروط التالية المتعلقة بإقامتكم في شاليه الملاك.'
-      : 'Please review the following terms regarding your stay at Al Malak Chalet.',
+      ? 'يُرجى مراجعة الشروط التالية المتعلقة بإقامتكم في شاليه وودي.'
+      : 'Please review the following terms regarding your stay at Woody Chalete.',
     locationAr: 'الموقع',
     locationEn: 'Location',
   };
 
-  const locationUrl = 'https://maps.app.goo.gl/Zz9uFgWiYWyBEUnVA';
+  const locationUrl = 'https://maps.app.goo.gl/Wsnnm9W6nxvyBUcy8';
   const LocationPin = () => (
     <svg
       className="pi-footer-location-icon"

@@ -73,7 +73,7 @@ export const Booking: React.FC = () => {
   const [pricingSettings, setPricingSettings] = useState<PricingSettings | null>(null);
 
   // Dynamic bank details from Firestore
-  const [bankDetails, setBankDetails] = useState({ bank_name: 'Bank Muscat', account_name: 'Al Malak Chalet LLC', iban: 'OM12 0123 0000 0012 3456 789', bankPhone: '' });
+  const [bankDetails, setBankDetails] = useState({ bank_name: '', account_name: '', iban: '', bankPhone: '' });
 
   // Day-use slots
   const [dayUseSlots, setDayUseSlots] = useState<DayUseSlot[]>([]);
