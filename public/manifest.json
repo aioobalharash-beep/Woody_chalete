@@ -1,11 +1,11 @@
 {
-  "name": "Al Malak Chalet",
-  "short_name": "Al Malak",
+  "name": "Woody Chalete",
+  "short_name": "Woody",
   "description": "Luxury chalet booking and management",
   "start_url": "/",
   "display": "standalone",
-  "theme_color": "#0A1628",
-  "background_color": "#FAF9F6",
+  "theme_color": "#1C3A2A",
+  "background_color": "#F2E8D5",
   "orientation": "portrait-primary",
   "icons": [
     {

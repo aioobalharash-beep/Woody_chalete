@@ -83,12 +83,12 @@ const DEFAULT_PRICING: PricingSettings = {
 };
 
 const DEFAULT_DATA: PropertyDetails = {
-  name: { en: 'Al Malak Chalet', ar: 'شاليه الملاك' },
+  name: { en: 'Woody Chalete', ar: 'شاليه وودي' },
   capacity: 12,
   area_sqm: 850,
   nightly_rate: 120,
   headline: { en: 'Curated Excellence', ar: '' },
-  description: { en: 'Nestled in the heart of the Omani landscape, Al Malak Chalet offers an unparalleled blend of modern luxury and heritage-inspired architecture. Every corner of this estate has been curated to provide a seamless flow between indoor relaxation and outdoor majesty.', ar: '' },
+  description: { en: 'Nestled in the heart of the Omani landscape, Woody Chalete offers an unparalleled blend of modern luxury and heritage-inspired architecture. Every corner of this estate has been curated to provide a seamless flow between indoor relaxation and outdoor majesty.', ar: '' },
   featureSections: [],
   gallery: [
     { url: 'https://picsum.photos/seed/oman-bedroom-1/800/1000', label: 'Master Suite: Serene Sands' },
@@ -96,9 +96,9 @@ const DEFAULT_DATA: PropertyDetails = {
     { url: 'https://picsum.photos/seed/oman-kitchen/800/1000', label: 'Culinary Studio' },
   ],
   pricing: DEFAULT_PRICING,
-  bank_name: 'Bank Muscat',
-  account_name: 'Al Malak Chalet LLC',
-  iban: 'OM12 0123 0000 0012 3456 789',
+  bank_name: '',
+  account_name: '',
+  iban: '',
   bankPhone: '',
   termsOfStay: { en: '', ar: '' },
   footerText: { en: '', ar: '' },
@@ -194,7 +194,7 @@ const PropertyEditorComponent: React.FC = () => {
 
   const uploadPropertyImage = (file: File): Promise<string> =>
     uploadImageToCloudinary(file, {
-      folder: 'al-malak-property',
+      folder: 'woody-chalete-property',
       onProgress: (pct) => setUploadProgress(pct),
     }).finally(() => setUploadProgress(null));
 

@@ -315,7 +315,7 @@ export function formatBreakdown(
 
 // ── Check-in / Check-out timing engine ──────────────────────────────────────
 //
-// Al Malak operates on a weekday/weekend schedule:
+// Woody Chalete operates on a weekday/weekend schedule:
 //   Sun–Wed : day use ends 10 PM, overnight check-out 10 AM
 //   Thu–Sat : day use ends 11 PM, overnight check-out 11 AM
 // Check-in is always 2 PM. The rules key off the DAY THE GUEST LEAVES

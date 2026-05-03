@@ -25,21 +25,21 @@ export interface ClientConfig {
 }
 
 export const CLIENT_CONFIG: ClientConfig = {
-  chaletName: 'Al Malak Chalet',
+  chaletName: 'Woody Chalete',
   logoPath: '/assets/brand/logo.png',
   theme: {
-    primary: '#2B3D8B',
-    secondary: '#7089C4',
-    background: '#F5F3ED',
+    primary: '#1C3A2A',
+    secondary: '#C8964A',
+    background: '#F2E8D5',
   },
   admin: {
-    email: 'nooralmalak901@gmail.com',
-    additionalEmails: ['shaikhashaikha77@gmail.com'],
-    name: 'Al Malak Admin',
+    email: 'akwakhhwwdyman@gmail.com',
+    additionalEmails: [],
+    name: 'Woody Chalete Admin',
   },
   social: {
-    whatsapp: '96871919666',
-    instagram: 'https://www.instagram.com/almalak_chalet/',
+    whatsapp: '96879210323',
+    instagram: 'https://www.instagram.com/wooody_chalete/',
   },
 };
 

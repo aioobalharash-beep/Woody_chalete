@@ -15,7 +15,7 @@ export const Confirmation: React.FC = () => {
   const state = location.state as { booking?: any; propertyName?: string } | null;
 
   const booking = state?.booking;
-  const propertyName = state?.propertyName || 'Al Malak Chalet';
+  const propertyName = state?.propertyName || 'Woody Chalete';
 
   const [bankPhone, setBankPhone] = useState('');
   const [licenseNumber, setLicenseNumber] = useState('');
@@ -52,7 +52,7 @@ export const Confirmation: React.FC = () => {
   const isDayUse = booking.check_in === booking.check_out;
   const lang = i18n.language;
   const isFullDay = isDayUse && (!booking.slot_name || /full\s*day/i.test(booking.slot_name));
-  const localizedProperty = lang === 'ar' ? 'شاليه الملاك' : propertyName;
+  const localizedProperty = lang === 'ar' ? 'شاليه وودي' : propertyName;
 
   const stayLabel = (() => {
     if (isDayUse) {
@@ -184,7 +184,7 @@ export const Confirmation: React.FC = () => {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.35 }}
-          href="https://maps.app.goo.gl/HHD7qjVXwmVZ9KjeA"
+          href="https://maps.app.goo.gl/Wsnnm9W6nxvyBUcy8"
           target="_blank"
           rel="noopener noreferrer"
           className="w-full bg-secondary-gold text-primary-navy py-4 rounded-[20px] font-bold text-sm uppercase tracking-widest flex items-center justify-center gap-2.5 active:scale-[0.98] transition-all shadow-lg shadow-secondary-gold/20"
@@ -240,7 +240,7 @@ export const Confirmation: React.FC = () => {
             <button onClick={() => navigate('/about')} className="text-[10px] text-primary-navy/40 underline font-bold uppercase tracking-widest">{t('sanctuary.aboutUs')}</button>
           </div>
           <p className="text-[9px] text-primary-navy/25 font-bold uppercase tracking-widest">
-            &copy; Al Malak Chalet. 2024
+            &copy; Woody Chalete. 2024
           </p>
         </div>
       </motion.div>

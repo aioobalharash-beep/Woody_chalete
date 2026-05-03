@@ -135,7 +135,7 @@ export const AddWalkInGuest: React.FC<AddWalkInGuestProps> = ({ open, onClose, p
       if (paymentMode === 'paid' && receiptFile) {
         try {
           receiptURL = await uploadToCloudinary(receiptFile, {
-            folder: 'al-malak-receipts',
+            folder: 'woody-chalete-receipts',
             onProgress: setReceiptProgress,
           });
         } catch (err) {
@@ -172,7 +172,7 @@ export const AddWalkInGuest: React.FC<AddWalkInGuestProps> = ({ open, onClose, p
 
       await firestoreBookings.create({
         property_id: prop?.id || 'default',
-        property_name: prop?.name || 'Al Malak Chalet',
+        property_name: prop?.name || 'Woody Chalete',
         guest_name: form.name.trim(),
         guest_phone: `+968${form.phone.replace(/\s/g, '')}`,
         guest_email: form.email || undefined,

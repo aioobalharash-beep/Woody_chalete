@@ -148,7 +148,7 @@ function buildInvoiceHtml(
     year: 'numeric',
   });
 
-  const companyName = (invoice.chaletName || (isAr ? 'شاليه الملاك' : 'Al Malak Chalet')).toUpperCase();
+  const companyName = (invoice.chaletName || (isAr ? 'شاليه وودي' : 'Woody Chalete')).toUpperCase();
   const location = isAr ? 'مسقط، سلطنة عُمان' : 'Muscat, Sultanate of Oman';
   const regInfo = invoice.licenseNumber
     ? (isAr ? `ترخيص سياحي: ${invoice.licenseNumber}` : `Tourism License: ${invoice.licenseNumber}`)
@@ -163,7 +163,7 @@ function buildInvoiceHtml(
   const grandTotalLabel = isAr ? 'الإجمالي العام' : 'Grand Total';
 
   // Translate property name for Arabic
-  const localizedProperty = isAr ? 'شاليه الملاك' : invoice.room_type;
+  const localizedProperty = isAr ? 'شاليه وودي' : invoice.room_type;
 
   const fmtAmount = (n: number): string => {
     const val = n.toFixed(2);
@@ -206,8 +206,8 @@ function buildInvoiceHtml(
   const refId = invoice.id.slice(0, 8).toUpperCase();
 
   const footerText = isAr
-    ? 'شاليه الملاك  |  سلطنة عُمان  |  هذه فاتورة صادرة آلياً ولا تتطلب توقيعاً'
-    : 'Al Malak Chalet  |  Sultanate of Oman  |  This is a computer-generated invoice.';
+    ? 'شاليه وودي  |  سلطنة عُمان  |  هذه فاتورة صادرة آلياً ولا تتطلب توقيعاً'
+    : 'Woody Chalete  |  Sultanate of Oman  |  This is a computer-generated invoice.';
 
   // Build items HTML
   let itemsHtml = '';
@@ -307,7 +307,7 @@ function buildTermsHtml(
   const dir = isAr ? 'rtl' : 'ltr';
   const textStart = isAr ? 'text-right' : 'text-left';
 
-  const companyName = isAr ? 'شاليه الملاك' : 'AL MALAK CHALET';
+  const companyName = isAr ? 'شاليه وودي' : 'WOODY CHALETE';
   const location = isAr ? 'مسقط، سلطنة عُمان' : 'Muscat, Sultanate of Oman';
   const title = isAr ? 'شروط الإقامة' : 'Terms of Stay';
 
@@ -320,8 +320,8 @@ function buildTermsHtml(
   });
 
   const footerText = isAr
-    ? 'شاليه الملاك  |  سلطنة عُمان  |  هذه الوثيقة لأغراض إعلامية فقط.'
-    : 'Al Malak Chalet  |  Sultanate of Oman  |  This document is for informational purposes.';
+    ? 'شاليه وودي  |  سلطنة عُمان  |  هذه الوثيقة لأغراض إعلامية فقط.'
+    : 'Woody Chalete  |  Sultanate of Oman  |  This document is for informational purposes.';
 
   // Convert newlines to paragraphs
   const bodyHtml = termsText
@@ -391,7 +391,7 @@ export async function downloadTermsPDF(termsText: string, lang = 'en') {
     );
     doc.save(
       lang === 'ar'
-        ? 'شاليه-الملاك-شروط-الإقامة.pdf'
+        ? 'شاليه-وودي-شروط-الإقامة.pdf'
         : 'Al-Malak-Chalet-Terms-of-Stay.pdf',
     );
   } catch (err) {
