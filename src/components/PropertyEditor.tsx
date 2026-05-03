@@ -88,7 +88,7 @@ const DEFAULT_DATA: PropertyDetails = {
   area_sqm: 850,
   nightly_rate: 120,
   headline: { en: 'Curated Excellence', ar: '' },
-  description: { en: 'Nestled in the heart of the Omani landscape, Al Malak Chalet offers an unparalleled blend of modern luxury and heritage-inspired architecture. Every corner of this estate has been curated to provide a seamless flow between indoor relaxation and outdoor majesty.', ar: '' },
+  description: { en: 'Nestled in the heart of the Omani landscape, Woody Chalete offers an unparalleled blend of modern luxury and heritage-inspired architecture. Every corner of this estate has been curated to provide a seamless flow between indoor relaxation and outdoor majesty.', ar: '' },
   featureSections: [],
   gallery: [
     { url: 'https://picsum.photos/seed/oman-bedroom-1/800/1000', label: 'Master Suite: Serene Sands' },
@@ -194,7 +194,7 @@ const PropertyEditorComponent: React.FC = () => {
 
   const uploadPropertyImage = (file: File): Promise<string> =>
     uploadImageToCloudinary(file, {
-      folder: 'al-malak-property',
+      folder: 'woody-chalete-property',
       onProgress: (pct) => setUploadProgress(pct),
     }).finally(() => setUploadProgress(null));
 

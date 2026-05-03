@@ -95,8 +95,8 @@ export const PrintableInvoice: React.FC<PrintableInvoiceProps> = ({
   const isAr = lang === 'ar';
   const dir = isAr ? 'rtl' : 'ltr';
   const refId = invoice.id.slice(0, 8).toUpperCase();
-  const property = isAr ? 'شاليه الملاك' : invoice.room_type;
-  const company = (chaletName || (isAr ? 'شاليه الملاك' : 'Al Malak Chalet')).toUpperCase();
+  const property = isAr ? 'شاليه وودي' : invoice.room_type;
+  const company = (chaletName || (isAr ? 'شاليه وودي' : 'Woody Chalete')).toUpperCase();
 
   const dateLocale = isAr ? 'ar-OM' : 'en-GB';
   const fmtDate = (d: string | undefined) =>
@@ -202,7 +202,7 @@ export const PrintableInvoice: React.FC<PrintableInvoiceProps> = ({
               <img
                 src="/assets/brand/logo.png"
                 className="invoice-logo"
-                alt={isAr ? 'شعار شاليه الملاك' : 'Al Malak Chalet Logo'}
+                alt={isAr ? 'شعار شاليه وودي' : 'Woody Chalete Logo'}
               />
               <div>
                 <div className="pi-brand-name">{company}</div>
